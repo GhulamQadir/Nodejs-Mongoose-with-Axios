@@ -5,7 +5,8 @@ const mongoose = require('mongoose')
 const app = express();
 const bcrypt = require('bcryptjs')
 const port = 4001;
-let authModel = require('./authSchema');
+let authModel = require('./models/authSchema');
+const todoModel = require('./models/todoSchema')
 const ey = require('./')
 const dotenv = require("dotenv");
 dotenv.config({ path: "./nodeman.env" });
@@ -85,6 +86,25 @@ app.post('/signin', async(req, res) => {
         res.status(403).send({message: "No user is registered with this email"})
 
     }
+}),
+
+
+app.post('/todoAdd', async(req, res) => {
+    let userCreate = new todoModel({
+        todoName: req.body.todoWalaKam})
+    userCreate.save()
+    .then((response) => {
+        res.status(200).send({result: response, message: "ToDo Added successfully"})
+    })
+    .catch((err) => {
+        res.status(400).send({result: err.message, message: "ToDo Not Added successfully"})
+
+    })
+}),
+
+app.get('/getAllTodo', async(req, res) => {
+    var result = await todoModel.find({})
+    res.status(200).send({message: 'All data fetch successfully', data: result})
 }),
 
 app.listen(port, () => {
