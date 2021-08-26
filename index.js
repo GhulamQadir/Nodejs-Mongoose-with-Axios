@@ -6,7 +6,8 @@ const app = express();
 const bcrypt = require('bcryptjs')
 const port = 4001;
 let authModel = require('./models/authSchema');
-const todoModel = require('./models/todoSchema')
+const todoModel = require('./models/todoSchema');
+const mainRouter = require('./route/mainRoute')
 const ey = require('./')
 const dotenv = require("dotenv");
 dotenv.config({ path: "./nodeman.env" });
@@ -19,6 +20,7 @@ app.use(bd.urlencoded({
 }))
 
 app.use(bd.json())
+app.use(mainRouter)
 
 
 mongoose.connect(process.env.url, {
